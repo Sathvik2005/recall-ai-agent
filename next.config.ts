@@ -1,0 +1,1 @@
+import type { NextConfig } from 'next';\nconst nextConfig: NextConfig = { poweredByHeader: false };\nexport default nextConfig;\n
