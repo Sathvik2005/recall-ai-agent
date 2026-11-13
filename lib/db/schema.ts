@@ -8,6 +8,7 @@ export const messages = pgTable("messages", {
  id: uuid("id").defaultRandom().primaryKey(),
  conversationId: uuid("conversation_id").notNull().references(()=>conversations.id,{onDelete:"cascade"}),
  role: text("role").notNull(), content: text("content").notNull(),
+ sources: jsonb("sources").$type<Array<{title:string;url:string;snippet:string;publishedAt?:string}>>().default([]),
  createdAt: timestamp("created_at",{withTimezone:true}).defaultNow().notNull()
 }, t=>[index("messages_conversation_created_idx").on(t.conversationId,t.createdAt)]);
 export const researchRuns = pgTable("research_runs", {
