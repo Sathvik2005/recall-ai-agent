@@ -1,0 +1,1 @@
+import Workspace from '@/components/workspace';\nexport default function Home() { return <Workspace />; }\n
