@@ -1,0 +1,38 @@
+[
+  {
+    "id": "exact-date-recall",
+    "question": "What did I ask you on 3 November?",
+    "memory": [
+      {"at":"2026-11-03T09:10:00+05:30","role":"user","content":"Compare Neon and Supabase pricing for a small side project."},
+      {"at":"2026-11-03T09:11:00+05:30","role":"assistant","content":"Compared the free tiers and usage limits."}
+    ],
+    "mustInclude": ["Neon", "Supabase", "3 November"],
+    "mustNot": ["invented questions"]
+  },
+  {
+    "id": "cross-thread-topic-recall",
+    "question": "Last Tuesday I asked about Postgres hosting. Has pricing changed?",
+    "memory": [
+      {"at":"2026-11-10T13:00:00+05:30","role":"user","content":"Which hosted Postgres services have a generous free tier?"},
+      {"at":"2026-11-10T13:01:00+05:30","role":"assistant","content":"Discussed Neon, Supabase, and Railway."}
+    ],
+    "mustInclude": ["Neon", "Supabase", "Railway", "current evidence"],
+    "mustNot": ["claiming a change without sources"]
+  },
+  {
+    "id": "pronoun-resolution",
+    "question": "Have any of those five CRM tools shipped something significant?",
+    "memory": [
+      {"at":"2026-11-09T10:00:00+05:30","role":"user","content":"Shortlist five CRM tools for a 20-person sales team: HubSpot, Pipedrive, Zoho CRM, Freshsales, and Salesforce."}
+    ],
+    "mustInclude": ["HubSpot", "Pipedrive", "Zoho CRM", "Freshsales", "Salesforce"],
+    "mustNot": ["substituting unrelated products"]
+  },
+  {
+    "id": "missing-memory-honesty",
+    "question": "What did I ask you on 14 February last year?",
+    "memory": [],
+    "mustInclude": ["history unavailable"],
+    "mustNot": ["fabricated recall"]
+  }
+]
