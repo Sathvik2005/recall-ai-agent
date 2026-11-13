@@ -1,0 +1,1 @@
+import { defineConfig } from 'drizzle-kit';\nexport default defineConfig({ schema: './lib/db/schema.ts', out: './drizzle', dialect: 'postgresql', dbCredentials: { url: process.env.DATABASE_URL || 'postgres://placeholder:placeholder@localhost:5432/recall' } });\n
