@@ -1,0 +1,1 @@
+import { z } from 'zod';\nexport const chatRequestSchema = z.object({ message: z.string().trim().min(1).max(8000), conversationId: z.string().uuid().optional() });\nexport type ChatRequest = z.infer<typeof chatRequestSchema>;\n
