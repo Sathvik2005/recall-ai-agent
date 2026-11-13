@@ -15,7 +15,7 @@ A single Next.js App Router deployment keeps the product easy to operate on Verc
 - Tests: Vitest for deterministic system-contract checks.
 
 ## Memory model
-1. Episodic memory is the ordered message history. It answers what the user asked and when.
+1. Episodic memory is the ordered message history. It answers what the user asked and when. The chat request also retrieves a bounded window of recent messages across conversations, with local-time timestamps and thread titles, so date-based recall is not restricted to the active thread.
 2. Research memory stores each research run and its source observations. \`observed_at\` is distinct from a source's publication date.
 3. Semantic memory has a normalized fact table reserved for structured fact extraction. Automatic extraction is a deliberate follow-up, not simulated functionality.
 4. Temporal comparison must compare saved historical evidence with fresh evidence. Missing history or inconclusive search results must be reported honestly.
@@ -23,7 +23,7 @@ A single Next.js App Router deployment keeps the product easy to operate on Verc
 Historical observations are append-only. A later price or feature update creates another observation; it must not mutate the old one.
 
 ## Reliability and safety
-- Strict request schemas and bounded message history.
+- Strict request schemas, a bounded active-thread history, and a bounded cross-thread memory window (80 recent messages).
 - One tool, at most three calls per turn, five results per query.
 - Search timeout and response validation.
 - No claim of exhaustive search.
