@@ -23,13 +23,13 @@ export async function POST(request:NextRequest) {
    .orderBy(desc(messages.createdAt)).limit(80);
   await db.insert(messages).values({conversationId:conversation.id,role:"user",content:message});
   const history=previous.map(row=>({role:row.role==="assistant"?"assistant" as const:"user" as const,content:row.content}));
-  const zone=timeZone&&/^[A-Za-z_+-]+(?:\\/[A-Za-z0-9_+-]+)*$/.test(timeZone)?timeZone:"UTC";
+  const zone=timeZone&&/^[A-Za-z_+-]+(?:\/[A-Za-z0-9_+-]+)*$/.test(timeZone)?timeZone:"UTC";
   const memoryContext=globalMemory.reverse().map(row=>{
    let stamp:string;
    try{stamp=new Intl.DateTimeFormat("en-GB",{dateStyle:"medium",timeStyle:"short",timeZone:zone}).format(row.createdAt);}
    catch{stamp=row.createdAt.toISOString();}
    return "["+stamp+" | "+row.title+"] "+(row.role==="assistant"?"RECALL: ":"USER: ")+row.content.slice(0,1400);
-  }).join("\\n");
+  }).join("\n");
   const run=await runAgent(message,history,memoryContext);
   await db.insert(messages).values({conversationId:conversation.id,role:"assistant",content:run.text});
   await db.update(conversations).set({updatedAt:new Date()}).where(eq(conversations.id,conversation.id));
