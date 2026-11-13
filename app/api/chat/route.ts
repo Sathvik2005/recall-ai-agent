@@ -31,7 +31,7 @@ export async function POST(request:NextRequest) {
    return "["+stamp+" | "+row.title+"] "+(row.role==="assistant"?"RECALL: ":"USER: ")+row.content.slice(0,1400);
   }).join("\n");
   const run=await runAgent(message,history,memoryContext);
-  await db.insert(messages).values({conversationId:conversation.id,role:"assistant",content:run.text});
+  await db.insert(messages).values({conversationId:conversation.id,role:"assistant",content:run.text,sources:run.sources});
   await db.update(conversations).set({updatedAt:new Date()}).where(eq(conversations.id,conversation.id));
   if(run.searched) {
    const saved=await db.insert(researchRuns).values({conversationId:conversation.id,query:message,status:"completed",completedAt:new Date()}).returning();
