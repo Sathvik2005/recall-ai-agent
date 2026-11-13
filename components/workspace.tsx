@@ -22,7 +22,7 @@ export default function Workspace(){
   if(!text.trim()||busy)return;setError("");setView("chat");setInput("");
   const next=[...messages,{role:"user" as const,content:text}];setMessages(next);setBusy(true);
   try{
-   const res=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({message:text,conversationId})});
+   const res=await fetch("/api/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({message:text,conversationId,timeZone:Intl.DateTimeFormat().resolvedOptions().timeZone})});
    const data=await res.json();if(!res.ok)throw new Error(data.error||"Request failed");
    setConversationId(data.conversationId);setMessages([...next,{role:"assistant",content:data.answer,sources:data.sources||[]}]);void loadConversations();
   }catch(e){setError(e instanceof Error?e.message:"Something went wrong");}
