@@ -1,16 +1,17 @@
-import { generateText, tool } from "ai";
+import { generateText,tool } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
 import { z } from "zod";
-import { webSearch, type SearchResult } from "@/lib/providers/search";
+import { webSearch,type SearchResult } from "@/lib/providers/search";
 import { SYSTEM_PROMPT } from "./prompts";
 export type ChatTurn={role:"user"|"assistant";content:string};
 export type AgentResult={text:string;sources:SearchResult[];searched:boolean};
-export async function runAgent(message:string,history:ChatTurn[]):Promise<AgentResult> {
- if(!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not configured. Add an OpenAI API key to enable RECALL.");
+export async function runAgent(message:string,history:ChatTurn[],memoryContext=""):Promise<AgentResult> {
+ if(!process.env.OPENAI_API_KEY)throw new Error("OPENAI_API_KEY is not configured. Add an OpenAI API key to enable RECALL.");
  const openai=createOpenAI({apiKey:process.env.OPENAI_API_KEY});
- const sources:SearchResult[]=[]; let searchCount=0;
+ const sources:SearchResult[]=[];let searchCount=0;
+ const system=memoryContext?SYSTEM_PROMPT+"\\n\\nRETRIEVED CROSS-CONVERSATION MEMORY (timestamped; use only when relevant):\\n"+memoryContext:SYSTEM_PROMPT;
  const result=await generateText({
-  model:openai(process.env.OPENAI_MODEL||"gpt-4.1-mini"),system:SYSTEM_PROMPT,
+  model:openai(process.env.OPENAI_MODEL||"gpt-4.1-mini"),system,
   messages:[...history.slice(-16).map(turn=>({role:turn.role,content:turn.content})),{role:"user",content:message}],
   maxSteps:4,temperature:0.2,
   tools:{web_search:tool({
